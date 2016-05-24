@@ -1,5 +1,7 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.roomies.contactselector.ThumbnailCache;
+
 public class Welcome extends AppCompatActivity {
+
+    public static ThumbnailCache cacheManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -32,6 +38,9 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initCache();
+
         setContentView(R.layout.activity_welcome);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -55,6 +64,16 @@ public class Welcome extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void initCache() {
+        final int memClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE))
+                .getMemoryClass();
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+
+        cacheManager = new ThumbnailCache(cacheSize);
     }
 
     @Override
