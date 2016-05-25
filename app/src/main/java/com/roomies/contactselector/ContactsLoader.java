@@ -26,20 +26,15 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
 
     public ContactsLoader(Context context) {
         super(context);
-
         baseUri = Contacts.CONTENT_URI;
-
         select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
                 + Contacts.HAS_PHONE_NUMBER + "=1) AND ("
                 + Contacts.DISPLAY_NAME + " != '' ))";
-
         cr = context.getContentResolver();
-
     }
 
     @Override
     public ArrayList<Contact> loadInBackground() {
-
 		/*
          * This method is called on a background thread and should generate a
 		 * new set of data to be delivered back to the client.
@@ -53,7 +48,6 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
 
         if (cur.moveToFirst()) {
             do {
-
                 Contact contact = new Contact();
                 contact.setFirstName(cur.getString(cur
                         .getColumnIndex(Contacts.DISPLAY_NAME_PRIMARY)));
@@ -62,7 +56,6 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
                         cr,
                         ContentUris.withAppendedId(Contacts.CONTENT_URI,
                                 cur.getLong(cur.getColumnIndex(Contacts._ID)))));
-
                 data.add(contact);
             } while (cur.moveToNext());
         }
@@ -108,7 +101,6 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
 
     @Override
     public void deliverResult(ArrayList<Contact> data) {
-
         if (isReset()) {
             // The Loader has been reset; ignore the result and invalidate the
             // data.
@@ -121,17 +113,14 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
 		 * The old data may still be in use (i.e. bound to an adapter, etc.), so
 		 * we must protect it until the new data has been delivered.
 		 */
-
         ArrayList<Contact> oldData = mData;
         mData = data;
 
         if (isStarted()) {
-
 			/*
 			 * If the Loader is in a started state, deliver the results to the
 			 * client. The superclass method does this for us.
 			 */
-
             super.deliverResult(data);
         }
 
@@ -139,14 +128,12 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
         if (oldData != null && oldData != data) {
             onReleaseResources(oldData);
         }
-
     }
 
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
         // Loader is in a started state..
-
         if (mData != null) {
             // Deliver any previously loaded data immediately.
             deliverResult(mData);
@@ -172,7 +159,6 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
         // The Loader is in a stopped state, so we should attempt to cancel the
         // current load (if there is one).
         cancelLoad();
-
         // Note that we leave the observer as is; Loaders in a stopped state
         // should still monitor the data source for changes so that the Loader
         // will know to force a new load if it is ever started again.
@@ -182,7 +168,6 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
     public void onCanceled(ArrayList<Contact> data) {
         // Attempt to cancel the current asynchronous load.
         super.onCanceled(data);
-
         // The load has been canceled, so we should release the resources
         // associated with 'data'.
         onReleaseResources(data);
@@ -196,5 +181,4 @@ public class ContactsLoader extends AsyncTaskLoader<ArrayList<Contact>> {
         // should be released here.
         cur.close();
     }
-
 }

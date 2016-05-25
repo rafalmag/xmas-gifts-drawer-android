@@ -23,18 +23,15 @@ public class ContactPickerFragment extends Fragment implements
         LoaderCallbacks<ArrayList<Contact>> {
 
     public static ContactPickerFragment newInstance(int arg) {
-
         ContactPickerFragment f = new ContactPickerFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("index", arg);
         f.setArguments(bundle);
-
         return f;
     }
 
     private AppListAdapter mAdapter;
     private AutoCompleteTextView mAutoCompleteTextView;
-    private ListView mlistView;
     private ArrayList<Contact> selectedContacts;
     private AppListAdapter mListAdapter;
 
@@ -56,7 +53,7 @@ public class ContactPickerFragment extends Fragment implements
                 .findViewById(R.id.multiAutoCompleteTextView1);
         mAutoCompleteTextView.setHighlightColor(Color.GREEN);
         mAutoCompleteTextView.setThreshold(1);
-        mlistView = (ListView) view.findViewById(R.id.listView1);
+        ListView mlistView = (ListView) view.findViewById(R.id.listView1);
 
         mAutoCompleteTextView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -74,45 +71,35 @@ public class ContactPickerFragment extends Fragment implements
         });
 
         if (selectedContacts == null) {
-            selectedContacts = new ArrayList<Contact>();
-            mListAdapter = new AppListAdapter(getActivity(),
-                    selectedContacts, true);
+            selectedContacts = new ArrayList<>();
+            mListAdapter = new AppListAdapter(getActivity(), selectedContacts, true);
         } else {
-            mListAdapter = new AppListAdapter(getActivity(),
-                    selectedContacts, true);
+            mListAdapter = new AppListAdapter(getActivity(), selectedContacts, true);
             mListAdapter.setData(selectedContacts);
         }
-
         mlistView.setAdapter(mListAdapter);
-
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         System.out.println("onActivityCreated()");
         getLoaderManager().initLoader(1, null, this);
     }
 
     @Override
     public Loader<ArrayList<Contact>> onCreateLoader(int arg0, Bundle arg1) {
-
         System.out.println("onCreateLoader()");
         return new ContactsLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Contact>> arg0,
-                               ArrayList<Contact> data) {
-
+    public void onLoadFinished(Loader<ArrayList<Contact>> arg0, ArrayList<Contact> data) {
         System.out.println("onLoaderFinished()");
         mAdapter = new AppListAdapter(getActivity(), data, false);
         mAdapter.setData(data);
-
         mAutoCompleteTextView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -122,5 +109,4 @@ public class ContactPickerFragment extends Fragment implements
         // longer using it.
         mAdapter.setData(null);
     }
-
 }

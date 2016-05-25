@@ -8,7 +8,6 @@ public class ContactsObserver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context arg0, Intent arg1) {
-
     }
 
 }

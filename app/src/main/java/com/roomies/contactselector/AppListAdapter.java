@@ -12,16 +12,14 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import pl.rafalmag.xmasgiftsdrawer.R;
 import pl.rafalmag.xmasgiftsdrawer.Welcome;
 
+// ListAdapter
 public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable {
     private LayoutInflater mInflater;
-    private Bitmap bmp;
-    private ByteArrayOutputStream baos;
     private Context context;
     private ArrayList<Contact> data;
     private ArrayList<Contact> tempData;
@@ -31,18 +29,16 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
     @SuppressWarnings("unchecked")
     public AppListAdapter(Context ctx, ArrayList<Contact> data, boolean removeAllowed) {
         super(ctx, android.R.layout.simple_list_item_2);
-        mInflater = (LayoutInflater) ctx
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         context = ctx;
         this.tempData = ((ArrayList<Contact>) data.clone());
-        this.suggestions = new ArrayList<Contact>();
+        this.suggestions = new ArrayList<>();
         this.removeAllowed = removeAllowed;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-
         if (convertView == null) {
             view = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
         } else {
@@ -51,7 +47,7 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
 
         Contact item = getItem(position);
 
-        bmp = Welcome.cacheManager.get(item.get_id());
+        Bitmap bmp = Welcome.cacheManager.get(item.get_id());
         if (bmp != null) {
             ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
             System.out.println("CACHE HIT at :" + item.get_id());
@@ -72,35 +68,28 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
         } else {
             view.findViewById(R.id.removeBtn).setVisibility(View.INVISIBLE);
         }
-
         return view;
     }
 
     @Override
     public Filter getFilter() {
-
-        Filter filter = new Filter() {
+        return new Filter() {
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence arg0,
-                                          FilterResults filterResults) {
-
+            protected void publishResults(CharSequence arg0, FilterResults filterResults) {
                 data = ((ArrayList<Contact>) filterResults.values);
-
                 setData(data);
                 notifyDataSetChanged();
             }
 
             @Override
             public CharSequence convertResultToString(Object resultValue) {
-                String string = ((Contact) resultValue).getFirstName();
-                return string;
+                return ((Contact) resultValue).getFirstName();
             }
 
             @Override
             public FilterResults performFiltering(CharSequence searchQuery) {
-
                 FilterResults filterResults = new FilterResults();
 //				System.out.println("performing filtering.." + searchQuery);
                 if (searchQuery != null) {
@@ -110,9 +99,8 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
                     for (int i = 0; i < tempData.size(); i++) {
                         if (tempData
                                 .get(i)
-                                .getFirstName().toLowerCase().startsWith(
-                                        searchQuery.toString().toLowerCase())) {
-
+                                .getFirstName().toLowerCase()
+                                .startsWith(searchQuery.toString().toLowerCase())) {
 //							System.out.println("Found at : " + i);
                             suggestions.add(tempData.get(i));
                         }
@@ -120,17 +108,12 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
 
                     filterResults.values = suggestions;
                     filterResults.count = suggestions.size();
-
                     return filterResults;
-
                 } else {
                     return filterResults;
                 }
-
             }
         };
-
-        return filter;
     }
 
     public void setData(ArrayList<Contact> data) {
@@ -141,6 +124,5 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
             }
         }
         this.data = data;
-
     }
 }
