@@ -16,9 +16,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        switch (position) {
+            case 0:
+                return PlaceholderFragment.newInstance(position + 1);
+            case 1:
+                return ContactsFragment.newInstance();
+            case 2:
+                return PlaceholderFragment.newInstance(position + 1);
+            default:
+                throw new IllegalArgumentException("Unsupported position " + position);
+        }
     }
 
     @Override
@@ -31,12 +38,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "SECTION 1";
+                return "Welcome";
             case 1:
-                return "SECTION 2";
+                return "Select Contacts";
             case 2:
-                return "SECTION 3";
+                return "Drawer";
+            default:
+                throw new IllegalArgumentException("Unsupported position " + position);
         }
-        return null;
     }
 }
