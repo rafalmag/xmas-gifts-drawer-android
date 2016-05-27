@@ -1,9 +1,10 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.List;
 
 // ListAdapter
@@ -35,25 +37,23 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
             view = convertView;
         }
 
-        Contact item = getItem(position);
-
-        Bitmap bmp = MainActivity.cacheManager.get(item.get_id());
-        if (bmp != null) {
-            ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
-            Log.d(this.getClass().getSimpleName(), "CACHE HIT at :" + item.get_id());
-        } else {
-            Log.d(this.getClass().getSimpleName(), "CACHE MISS at :" + item.get_id());
-            bmp = BitmapFactory.decodeStream(item.getThumbnail());
-            if (bmp == null) {
-                bmp = BitmapFactory.decodeResource(context.getResources(),
-                        R.drawable.ic_launcher_shortcut_contact);
-                ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
-            } else {
-                MainActivity.cacheManager.put(item.get_id(), bmp);
-            }
-        }
-        ((TextView) view.findViewById(R.id.text)).setText(item.getFirstName());
+        Contact contact = getItem(position);
+        Bitmap bmp = getThumbnail(contact);
+        ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
+        ((TextView) view.findViewById(R.id.text)).setText(contact.getFirstName());
         return view;
+    }
+
+    private Bitmap getThumbnail(Contact contact) {
+        InputStream thumbnailInputStream = ContactsContract.Contacts.openContactPhotoInputStream(
+                context.getContentResolver(),
+                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contact.get_id()));
+        Bitmap bmp = BitmapFactory.decodeStream(thumbnailInputStream);
+        if (bmp == null) {
+            bmp = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.ic_launcher_shortcut_contact);
+        }
+        return bmp;
     }
 
 }

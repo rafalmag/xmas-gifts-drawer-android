@@ -2,7 +2,6 @@ package pl.rafalmag.xmasgiftsdrawer;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -72,7 +71,6 @@ public class ContactsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == RESULT_PICK_CONTACT) {
             Log.i(getClass().getSimpleName(), "onActivityResult: " + data.getDataString());
-            data.getData();
             ContentResolver cr = getActivity().getContentResolver();
             Cursor cursor = null;
             try {
@@ -84,10 +82,6 @@ public class ContactsFragment extends Fragment {
                 contact.setFirstName(cursor.getString(cursor
                         .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
                 contact.set_id(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
-                contact.setThumbnail(ContactsContract.Contacts.openContactPhotoInputStream(
-                        cr,
-                        ContentUris.withAppendedId(Contacts.CONTENT_URI,
-                                cursor.getLong(cursor.getColumnIndex(Contacts._ID)))));
                 contacts.add(contact);
                 mContactListAdapter.add(contact);
             } finally {

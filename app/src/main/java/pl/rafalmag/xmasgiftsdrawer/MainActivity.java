@@ -1,7 +1,5 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,8 +14,6 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ThumbnailCache cacheManager;
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -28,16 +24,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private MainSectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        initCache();
 
         setContentView(R.layout.main_activity);
 
@@ -48,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new MainSectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+//      The {@link ViewPager} that will host the section contents.
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -62,16 +52,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-    }
-
-    private void initCache() {
-        final int memClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE))
-                .getMemoryClass();
-
-        // Use 1/8th of the available memory for this memory cache.
-        final int cacheSize = 1024 * 1024 * memClass / 8;
-
-        cacheManager = new ThumbnailCache(cacheSize);
     }
 
     @Override
