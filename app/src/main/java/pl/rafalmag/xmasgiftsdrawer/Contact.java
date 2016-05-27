@@ -1,14 +1,11 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
-import java.io.InputStream;
-
 public class Contact {
 
     private String firstName;
     private String lastName;
     private String phoneNumberOffice;
     private String phoneNumberHome;
-    private InputStream thumbnail;
     private long _id;
 
     public long get_id() {
@@ -17,14 +14,6 @@ public class Contact {
 
     public void set_id(long _id) {
         this._id = _id;
-    }
-
-    public InputStream getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(InputStream thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getFirstName() {
@@ -63,8 +52,7 @@ public class Contact {
     public String toString() {
         return "Contact [firstName=" + firstName + ", lastName=" + lastName
                 + ", phoneNumberOffice=" + phoneNumberOffice
-                + ", phoneNumberHome=" + phoneNumberHome + ", thumbnail="
-                + thumbnail + ", _id=" + _id + "]";
+                + ", phoneNumberHome=" + phoneNumberHome + ", _id=" + _id + "]";
     }
 
 
