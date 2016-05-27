@@ -24,8 +24,8 @@ public class ContactsFragment extends Fragment {
 
     private static final int RESULT_PICK_CONTACT = 123;
 
-    private AppListAdapter mListAdapter;
-    private List<Contact> selectedContacts;
+    private ContactListAdapter mContactListAdapter;
+    private List<Contact> contacts = new ArrayList<>();
 
     public static Fragment newInstance() {
         return new ContactsFragment();
@@ -52,15 +52,9 @@ public class ContactsFragment extends Fragment {
             }
         });
 
-        ListView mlistView = (ListView) rootView.findViewById(R.id.listView1);
-        if (selectedContacts == null) {
-            selectedContacts = new ArrayList<>();
-            mListAdapter = new AppListAdapter(getActivity(), selectedContacts, true);
-        } else {
-            mListAdapter = new AppListAdapter(getActivity(), selectedContacts, true);
-            mListAdapter.setData(selectedContacts);
-        }
-        mlistView.setAdapter(mListAdapter);
+        ListView mContactListView = (ListView) rootView.findViewById(R.id.listView1);
+        mContactListAdapter = new ContactListAdapter(getActivity(), contacts);
+        mContactListView.setAdapter(mContactListAdapter);
         return rootView;
     }
 
@@ -73,7 +67,6 @@ public class ContactsFragment extends Fragment {
             Contacts.LOOKUP_KEY
     };
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,22 +74,27 @@ public class ContactsFragment extends Fragment {
             Log.i(getClass().getSimpleName(), "onActivityResult: " + data.getDataString());
             data.getData();
             ContentResolver cr = getActivity().getContentResolver();
-            Cursor cursor = cr.query(data.getData(), CONTACTS_SUMMARY_PROJECTION,
-                    null, null, null);
-            if (cursor == null || !cursor.moveToFirst()) {
-                throw new IllegalStateException("Activity result cannot be found ");
+            Cursor cursor = null;
+            try {
+                cursor = cr.query(data.getData(), CONTACTS_SUMMARY_PROJECTION, null, null, null);
+                if (cursor == null || !cursor.moveToFirst()) {
+                    throw new IllegalStateException("Activity result cannot be found ");
+                }
+                Contact contact = new Contact();
+                contact.setFirstName(cursor.getString(cursor
+                        .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
+                contact.set_id(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
+                contact.setThumbnail(ContactsContract.Contacts.openContactPhotoInputStream(
+                        cr,
+                        ContentUris.withAppendedId(Contacts.CONTENT_URI,
+                                cursor.getLong(cursor.getColumnIndex(Contacts._ID)))));
+                contacts.add(contact);
+                mContactListAdapter.add(contact);
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
-            Contact contact = new Contact();
-            contact.setFirstName(cursor.getString(cursor
-                    .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
-            contact.set_id(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
-            contact.setThumbnail(ContactsContract.Contacts.openContactPhotoInputStream(
-                    cr,
-                    ContentUris.withAppendedId(Contacts.CONTENT_URI,
-                            cursor.getLong(cursor.getColumnIndex(Contacts._ID)))));
-            selectedContacts.add(contact);
-            mListAdapter.add(contact);
-            cursor.close();
         }
     }
 
