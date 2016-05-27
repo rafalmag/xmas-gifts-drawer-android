@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,13 @@ public class ContactsFragment extends Fragment {
 
     public static Fragment newInstance() {
         return new ContactsFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // save fragment state when configuration changes - like screen rotated
+        setRetainInstance(true);
     }
 
     @Override
@@ -53,10 +61,6 @@ public class ContactsFragment extends Fragment {
             mListAdapter.setData(selectedContacts);
         }
         mlistView.setAdapter(mListAdapter);
-
-        // save fragment state when configuration changes - like screen rotated
-        setRetainInstance(true);
-
         return rootView;
     }
 
@@ -90,7 +94,7 @@ public class ContactsFragment extends Fragment {
                     cr,
                     ContentUris.withAppendedId(Contacts.CONTENT_URI,
                             cursor.getLong(cursor.getColumnIndex(Contacts._ID)))));
-//            selectedContacts.add(contact);
+            selectedContacts.add(contact);
             mListAdapter.add(contact);
             cursor.close();
         }
