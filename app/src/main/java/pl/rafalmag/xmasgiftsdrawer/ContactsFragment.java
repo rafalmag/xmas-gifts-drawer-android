@@ -33,7 +33,7 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.contacts, container, false);
+        View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
         Button addContact = (Button) rootView.findViewById(R.id.add_contact);
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +53,9 @@ public class ContactsFragment extends Fragment {
             mListAdapter.setData(selectedContacts);
         }
         mlistView.setAdapter(mListAdapter);
+
+        // save fragment state when configuration changes - like screen rotated
+        setRetainInstance(true);
 
         return rootView;
     }

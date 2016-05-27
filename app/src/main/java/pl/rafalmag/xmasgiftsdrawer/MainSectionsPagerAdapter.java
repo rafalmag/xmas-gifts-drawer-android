@@ -8,9 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class MainSectionsPagerAdapter extends FragmentPagerAdapter {
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public MainSectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -18,11 +18,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return PlaceholderFragment.newInstance(position + 1);
+                return WelcomeFragment.newInstance();
             case 1:
                 return ContactsFragment.newInstance();
             case 2:
-                return PlaceholderFragment.newInstance(position + 1);
+                //TODO drawer instance
+                return WelcomeFragment.newInstance();
             default:
                 throw new IllegalArgumentException("Unsupported position " + position);
         }
@@ -30,7 +31,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
         return 3;
     }
 

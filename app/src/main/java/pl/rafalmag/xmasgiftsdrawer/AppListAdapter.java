@@ -38,14 +38,14 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
+            view = mInflater.inflate(R.layout.contact_item, parent, false);
         } else {
             view = convertView;
         }
 
         Contact item = getItem(position);
 
-        Bitmap bmp = Welcome.cacheManager.get(item.get_id());
+        Bitmap bmp = MainActivity.cacheManager.get(item.get_id());
         if (bmp != null) {
             ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
             System.out.println("CACHE HIT at :" + item.get_id());
@@ -53,7 +53,7 @@ public class AppListAdapter extends ArrayAdapter<Contact> implements Filterable 
             System.out.println("CACHE MISS at :" + item.get_id());
             bmp = BitmapFactory.decodeStream(item.getThumbnail());
             if (bmp != null)
-                Welcome.cacheManager.put(item.get_id(), bmp);
+                MainActivity.cacheManager.put(item.get_id(), bmp);
             else {
                 bmp = BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.ic_launcher_shortcut_contact);
