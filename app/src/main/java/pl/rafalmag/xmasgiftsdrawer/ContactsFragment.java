@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
@@ -82,8 +83,9 @@ public class ContactsFragment extends Fragment {
                 contact.setFirstName(cursor.getString(cursor
                         .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
                 contact.set_id(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
-                contacts.add(contact);
                 mContactListAdapter.add(contact);
+                mContactListAdapter.registerDataSetObserver(new DataSetObserver() {
+                });
             } finally {
                 if (cursor != null) {
                     cursor.close();
@@ -92,4 +94,9 @@ public class ContactsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        contacts = mContactListAdapter.getItems();
+    }
 }

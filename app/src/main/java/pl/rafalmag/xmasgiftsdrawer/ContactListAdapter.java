@@ -8,24 +8,41 @@ import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filterable;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 // ListAdapter
-public class ContactListAdapter extends ArrayAdapter<Contact> implements Filterable {
+public class ContactListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context context;
+    private final List<Contact> data = new ArrayList<>();
 
     public ContactListAdapter(Context ctx, List<Contact> data) {
-        super(ctx, android.R.layout.simple_list_item_2);
+//        super(ctx, android.R.layout.simple_list_item_2);
         mInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         context = ctx;
-        addAll(data);
+        this.data.addAll(data);
+    }
+
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return data.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return data.get(position).get_id();
     }
 
     @Override
@@ -37,10 +54,19 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
             view = convertView;
         }
 
-        Contact contact = getItem(position);
+        final Contact contact = data.get(position);
         Bitmap bmp = getThumbnail(contact);
         ((ImageView) view.findViewById(R.id.icon)).setImageBitmap(bmp);
         ((TextView) view.findViewById(R.id.text)).setText(contact.getFirstName());
+
+        Button removeButton = (Button) view.findViewById(R.id.removeBtn);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.remove(contact);
+                notifyDataSetChanged();
+            }
+        });
         return view;
     }
 
@@ -56,4 +82,12 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements Filtera
         return bmp;
     }
 
+    public void add(Contact contact) {
+        data.add(contact);
+        notifyDataSetChanged();
+    }
+
+    public List<Contact> getItems() {
+        return data;
+    }
 }
