@@ -24,7 +24,6 @@ public class ContactListAdapter extends BaseAdapter {
     private final List<Contact> data = new ArrayList<>();
 
     public ContactListAdapter(Context ctx, List<Contact> data) {
-//        super(ctx, android.R.layout.simple_list_item_2);
         mInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         context = ctx;
         this.data.addAll(data);

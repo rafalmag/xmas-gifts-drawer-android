@@ -20,12 +20,23 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class ContactsFragment extends Fragment {
 
     private static final int RESULT_PICK_CONTACT = 123;
 
     private ContactListAdapter mContactListAdapter;
     private List<Contact> contacts = new ArrayList<>();
+    private Unbinder unbinder;
+
+    @BindView(R.id.add_contact)
+    Button addContact;
+
+    @BindView(R.id.listView1)
+    ListView mContactListView;
 
     public static Fragment newInstance() {
         return new ContactsFragment();
@@ -42,7 +53,7 @@ public class ContactsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.contacts_fragment, container, false);
-        Button addContact = (Button) rootView.findViewById(R.id.add_contact);
+        unbinder = ButterKnife.bind(this, rootView);
         addContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,10 +63,15 @@ public class ContactsFragment extends Fragment {
             }
         });
 
-        ListView mContactListView = (ListView) rootView.findViewById(R.id.listView1);
+//        ListView mContactListView = (ListView) rootView.findViewById(R.id.listView1);
         mContactListAdapter = new ContactListAdapter(getActivity(), contacts);
         mContactListView.setAdapter(mContactListAdapter);
         return rootView;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     static final String[] CONTACTS_SUMMARY_PROJECTION = new String[]{
@@ -93,6 +109,8 @@ public class ContactsFragment extends Fragment {
             }
         }
     }
+
+    //TODO use "Toast" when person added/removed
 
     @Override
     public void onPause() {

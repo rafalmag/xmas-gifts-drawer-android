@@ -23,7 +23,7 @@ public class MainSectionsPagerAdapter extends FragmentPagerAdapter {
                 return ContactsFragment.newInstance();
             case 2:
                 //TODO drawer instance
-                return WelcomeFragment.newInstance();
+                return DrawerFragment.newInstance();
             default:
                 throw new IllegalArgumentException("Unsupported position " + position);
         }
