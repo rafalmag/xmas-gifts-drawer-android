@@ -7,6 +7,8 @@ android {
 
     defaultConfig {
         applicationId "pl.rafalmag.xmasgiftsdrawer"
+        //ICS - 4.0.3, 4.0.4
+        // my S3 is 18 - JB 4.3
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
@@ -40,12 +42,12 @@ android {
 //        exclude 'META-INF/BCKEY.SF'
         pickFirst  'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
     }
-//    dexOptions {
-//        preDexLibraries true
-//        javaMaxHeapSize "3g"
-//        incremental true
-//        dexInProcess = true
-//    }
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize "3g"
+        incremental true
+        dexInProcess = true
+    }
     dexOptions {
         dexInProcess = false
     }
