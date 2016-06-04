@@ -16,9 +16,12 @@ import com.google.common.collect.Table;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class DrawerFragment extends Fragment {
 
+    Unbinder unbinder;
     @Inject
     ModelHolder modelHolder;
 
@@ -45,6 +48,7 @@ public class DrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.drawer_fragment, container, false);
+        unbinder = ButterKnife.bind(this, view);
         GridView drawerGrid = (GridView) view.findViewById(R.id.drawer_grid);
         drawerGrid.setAdapter(new BaseAdapter() {
             @Override
@@ -70,10 +74,14 @@ public class DrawerFragment extends Fragment {
         return view;
     }
 
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        //TODO / FIXME NPE here
         testText.setText(modelHolder.toString());
     }
 
