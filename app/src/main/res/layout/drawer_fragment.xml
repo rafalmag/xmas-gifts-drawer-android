@@ -11,12 +11,15 @@
     <TextView
         android:id="@+id/testText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="example"/>
 
     <GridView
         android:id="@+id/drawer_grid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/testText"
+        android:numColumns="3">
     </GridView>
 
 

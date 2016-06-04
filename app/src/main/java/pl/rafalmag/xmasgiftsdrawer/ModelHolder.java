@@ -1,5 +1,8 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -11,7 +14,7 @@ import javax.inject.Singleton;
 public class ModelHolder {
 
     private Model model = new Model();
-    private Map<Contact, Person> map = Maps.newHashMap();
+    private BiMap<Contact, Person> map = HashBiMap.create();
 
     public void addPerson(Contact contact) {
         Person person = getPerson(contact);
@@ -33,10 +36,19 @@ public class ModelHolder {
         return person;
     }
 
+    public int getPersonCount(){
+        return model.getPersons().size();
+    }
+
     @Override
     public String toString() {
         return "ModelHolder{" +
                 "model=\n" + model +
                 "\n}";
+    }
+
+    public Contact getContact(int i) {
+        Person person = Lists.newArrayList(model.getPersons()).get(i);
+        return map.inverse().get(person);
     }
 }
