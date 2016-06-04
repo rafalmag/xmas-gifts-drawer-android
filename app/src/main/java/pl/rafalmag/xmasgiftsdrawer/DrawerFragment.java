@@ -1,5 +1,6 @@
 package pl.rafalmag.xmasgiftsdrawer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,17 +8,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import javax.inject.Inject;
 
+import butterknife.BindView;
+
 public class DrawerFragment extends Fragment {
 
-    Table<Person, Person, Boolean> table = HashBasedTable.create();
+    @Inject
+    ModelHolder modelHolder;
+
+    private boolean mFirstAttach = true;
+
+    @BindView(R.id.testText)
+    TextView testText;
 
     public static DrawerFragment newInstance() {
         return new DrawerFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // dagger
+        if (mFirstAttach) {
+            MainApplication.getComponent(context).inject(this);
+            mFirstAttach = false;
+        }
     }
 
     @Override
@@ -47,6 +68,13 @@ public class DrawerFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //TODO / FIXME NPE here
+        testText.setText(modelHolder.toString());
     }
 
     //TODO use "Toast" when checkbox changes

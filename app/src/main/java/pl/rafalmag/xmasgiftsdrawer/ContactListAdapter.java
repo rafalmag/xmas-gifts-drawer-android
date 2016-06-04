@@ -17,13 +17,19 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 // ListAdapter
 public class ContactListAdapter extends BaseAdapter {
+
+    final ModelHolder modelHolder;
+
     private LayoutInflater mInflater;
     private Context context;
     private final List<Contact> data = new ArrayList<>();
 
-    public ContactListAdapter(Context ctx, List<Contact> data) {
+    public ContactListAdapter(Context ctx, List<Contact> data, ModelHolder modelHolder) {
+        this.modelHolder = modelHolder;
         mInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         context = ctx;
         this.data.addAll(data);
@@ -63,6 +69,7 @@ public class ContactListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 data.remove(contact);
+                modelHolder.removePerson(contact);
                 notifyDataSetChanged();
             }
         });
@@ -83,6 +90,7 @@ public class ContactListAdapter extends BaseAdapter {
 
     public void add(Contact contact) {
         data.add(contact);
+        modelHolder.addPerson(contact);
         notifyDataSetChanged();
     }
 

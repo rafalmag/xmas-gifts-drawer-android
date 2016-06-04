@@ -64,7 +64,9 @@ dependencies {
     compile ('pl.rafalmag.xmas:xmas:0.2'){
         exclude group:'ch.qos.logback', module:'logback-classic'
         exclude group:'ch.qos.logback', module:'logback-core'
+        exclude group:'org.codehaus.groovy', module:'groovy-all'
     }
+    compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
     // logging
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'com.github.tony19:logback-android-core:1.1.1-5'
@@ -74,6 +76,7 @@ dependencies {
 
     // dagger
     compile 'com.google.dagger:dagger:2.1'
+    apt 'com.google.dagger:dagger-compiler:2.1'
     testApt 'com.google.dagger:dagger-compiler:2.1'
     androidTestApt 'com.google.dagger:dagger-compiler:2.1'
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2

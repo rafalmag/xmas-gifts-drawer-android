@@ -2,9 +2,9 @@ package pl.rafalmag.xmasgiftsdrawer;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
@@ -19,6 +19,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,12 @@ public class ContactsFragment extends Fragment {
     @BindView(R.id.listView1)
     ListView mContactListView;
 
+    @Inject
+    ModelHolder modelHolder;
+
+    private boolean mFirstAttach = true;
+
+
     public static Fragment newInstance() {
         return new ContactsFragment();
     }
@@ -47,6 +55,16 @@ public class ContactsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // save fragment state when configuration changes - like screen rotated
         setRetainInstance(true);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // dagger
+        if (mFirstAttach) {
+            MainApplication.getComponent(context).inject(this);
+            mFirstAttach = false;
+        }
     }
 
     @Override
@@ -64,7 +82,7 @@ public class ContactsFragment extends Fragment {
         });
 
 //        ListView mContactListView = (ListView) rootView.findViewById(R.id.listView1);
-        mContactListAdapter = new ContactListAdapter(getActivity(), contacts);
+        mContactListAdapter = new ContactListAdapter(getActivity(), contacts, modelHolder);
         mContactListView.setAdapter(mContactListAdapter);
         return rootView;
     }
@@ -100,8 +118,6 @@ public class ContactsFragment extends Fragment {
                         .getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)));
                 contact.set_id(cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
                 mContactListAdapter.add(contact);
-                mContactListAdapter.registerDataSetObserver(new DataSetObserver() {
-                });
             } finally {
                 if (cursor != null) {
                     cursor.close();

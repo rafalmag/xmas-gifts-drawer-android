@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // dagger
+        MainApplication.getComponent(this).inject(this);
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 

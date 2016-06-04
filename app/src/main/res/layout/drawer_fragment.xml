@@ -9,14 +9,15 @@
     tools:context=".DrawerFragment">
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/testText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/welcome_info" />
+        android:layout_height="wrap_content" />
 
     <GridView
         android:id="@+id/drawer_grid"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></GridView>
+        android:layout_height="wrap_content">
+    </GridView>
+
 
 </RelativeLayout>

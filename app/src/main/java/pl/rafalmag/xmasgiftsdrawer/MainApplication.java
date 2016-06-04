@@ -5,20 +5,26 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 public class MainApplication extends Application {
-    private static MainApplication instance;
 
-    public MainApplication getInstance(){
-        return instance;
-    }
+    private MainApplicationComponent component;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+//        component = DaggerMainApplicationComponent.builder()
+//                .xmasGiftsDrawerModule(new XmasGiftsDrawerModule())
+//                .build();
+        component = DaggerMainApplicationComponent.create();
+
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    public static MainApplicationComponent getComponent(Context context) {
+        return ((MainApplication) context.getApplicationContext()).component;
     }
 }
