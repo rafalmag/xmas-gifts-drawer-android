@@ -136,16 +136,18 @@ public class DrawerFragment extends Fragment {
     }
 
     private void initGrid() {
-        drawerGrid.setNumColumns(modelHolder.getPersonCount() + 1);
-        adapter.notifyDataSetChanged();
-        drawerGrid.invalidateViews();
+        int numColumns = modelHolder.getPersonCount() + 1;
+        if(drawerGrid !=null) {
+            drawerGrid.setNumColumns(numColumns);
+            adapter.notifyDataSetChanged();
+            drawerGrid.invalidateViews();
 
-        int layoutWidth = relativeLayout.getWidth();
-        ViewGroup.LayoutParams layoutParams = drawerGrid.getLayoutParams();
-        //TODO calculate
-        layoutParams.width = layoutWidth;
-        drawerGrid.setLayoutParams(layoutParams);
-
+            int layoutWidth = relativeLayout.getWidth();
+            ViewGroup.LayoutParams layoutParams = drawerGrid.getLayoutParams();
+            //TODO calculate
+            layoutParams.width = layoutWidth;
+            drawerGrid.setLayoutParams(layoutParams);
+        }
     }
 
     //TODO use "Toast" when checkbox changes
