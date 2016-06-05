@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,10 @@ public class ContactListAdapter extends BaseAdapter {
     }
 
     public void add(Contact contact) {
+        if (data.contains(contact)) {
+            Log.i(getClass().getSimpleName(), "Contact " + contact + " already present");
+            return;
+        }
         data.add(contact);
         modelHolder.addPerson(contact);
         notifyDataSetChanged();

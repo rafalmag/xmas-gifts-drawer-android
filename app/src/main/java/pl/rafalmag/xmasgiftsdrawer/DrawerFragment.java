@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -26,11 +27,13 @@ public class DrawerFragment extends Fragment {
 
     private boolean mFirstAttach = true;
 
-    @BindView(R.id.testText)
-    TextView testText;
-
     @BindView(R.id.drawer_grid)
     GridView drawerGrid;
+
+    @BindView(R.id.drawer_layout)
+    RelativeLayout relativeLayout;
+
+    private BaseAdapter adapter;
 
     public static DrawerFragment newInstance() {
         return new DrawerFragment();
@@ -51,7 +54,7 @@ public class DrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.drawer_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
-        drawerGrid.setAdapter(new BaseAdapter() {
+        adapter = new BaseAdapter() {
             @Override
             public int getCount() {
                 int columns = modelHolder.getPersonCount() + 1;
@@ -105,7 +108,9 @@ public class DrawerFragment extends Fragment {
                 }
                 return textView;
             }
-        });
+        };
+        drawerGrid.setAdapter(adapter);
+        initGrid();
         return view;
     }
 
@@ -118,8 +123,29 @@ public class DrawerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        testText.setText(modelHolder.toString());
+        initGrid();
+    }
+
+    // http://stackoverflow.com/questions/35436045/onresume-not-called-in-fragment-using-tablayout-and-viewpager
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser) {
+            initGrid();
+        }
+    }
+
+    private void initGrid() {
         drawerGrid.setNumColumns(modelHolder.getPersonCount() + 1);
+        adapter.notifyDataSetChanged();
+        drawerGrid.invalidateViews();
+
+        int layoutWidth = relativeLayout.getWidth();
+        ViewGroup.LayoutParams layoutParams = drawerGrid.getLayoutParams();
+        //TODO calculate
+        layoutParams.width = layoutWidth;
+        drawerGrid.setLayoutParams(layoutParams);
+
     }
 
     //TODO use "Toast" when checkbox changes

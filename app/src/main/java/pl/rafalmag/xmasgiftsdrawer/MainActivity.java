@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -62,13 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
 //      The {@link ViewPager} that will host the section contents.
-//        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
