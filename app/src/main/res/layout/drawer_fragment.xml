@@ -9,23 +9,35 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".DrawerFragment">
 
-    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- http://stackoverflow.com/questions/7819837/scrollview-inside-horizontal-scrollview-not-working-properly -->
+    <HorizontalScrollView
+        android:id="@+id/horizontal_scroll_view"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:scrollbars="horizontal">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/vertical_scroll_view"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical">
 
-            <GridView
-                android:id="@+id/drawer_grid"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:columnWidth="170dp"
-                android:gravity="center"
-                android:numColumns="3"
-                android:stretchMode="columnWidth" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <GridView
+                    android:id="@+id/drawer_grid"
+                    android:layout_width="800dp"
+                    android:layout_height="1000dp"
+                    android:columnWidth="200dp"
+                    android:gravity="center"
+                    android:numColumns="3"
+                    android:scrollbars="vertical"
+                    android:stretchMode="columnWidth" />
+            </LinearLayout>
+        </ScrollView>
     </HorizontalScrollView>
 
 
