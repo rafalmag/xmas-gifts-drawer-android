@@ -93,20 +93,27 @@ public class DrawerFragment extends Fragment {
                     return textView;
                 }
                 // data
-                CheckBox checkBox = new CheckBox(inflater.getContext());
+                CheckBox checkBox = getOrCreateCheckBox(convertView, parent);
                 checkBox.setChecked(true);
                 return checkBox;
             }
 
             @NonNull
-            private TextView getOrCreateTextView(View convertView, ViewGroup parent) {
-                TextView textView;
-                if (convertView instanceof TextView) {
-                    textView = (TextView) convertView;
+            private CheckBox getOrCreateCheckBox(View convertView, ViewGroup parent) {
+                if (convertView instanceof CheckBox) {
+                    return (CheckBox) convertView;
                 } else {
-                    textView = new TextView(parent.getContext());
+                    return new CheckBox(parent.getContext());
                 }
-                return textView;
+            }
+
+            @NonNull
+            private TextView getOrCreateTextView(View convertView, ViewGroup parent) {
+                if (convertView instanceof TextView) {
+                    return (TextView) convertView;
+                } else {
+                    return new TextView(parent.getContext());
+                }
             }
         };
         drawerGrid.setAdapter(adapter);
@@ -130,22 +137,25 @@ public class DrawerFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser) {
+        if (isVisibleToUser) {
             initGrid();
         }
     }
 
     private void initGrid() {
-        int numColumns = modelHolder.getPersonCount() + 1;
-        if(drawerGrid !=null) {
+        if (drawerGrid != null) {
+            int numColumns = modelHolder.getPersonCount() + 1;
             drawerGrid.setNumColumns(numColumns);
             adapter.notifyDataSetChanged();
             drawerGrid.invalidateViews();
 
-            int layoutWidth = relativeLayout.getWidth();
+            int minLayoutWidth = relativeLayout.getWidth()
+                    - relativeLayout.getPaddingLeft() - relativeLayout.getPaddingRight();
+            int minLayoutHeight = relativeLayout.getHeight()
+                    - relativeLayout.getPaddingTop() - relativeLayout.getPaddingBottom();
             ViewGroup.LayoutParams layoutParams = drawerGrid.getLayoutParams();
-            //TODO calculate
-            layoutParams.width = layoutWidth;
+            layoutParams.width = Math.max(minLayoutWidth, 200 * numColumns);
+            layoutParams.height = Math.max(minLayoutHeight, 100 * numColumns);
             drawerGrid.setLayoutParams(layoutParams);
         }
     }
