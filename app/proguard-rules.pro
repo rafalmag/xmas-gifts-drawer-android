@@ -15,3 +15,19 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# based on https://github.com/melix/gr8confagenda/blob/master/gr8confagenda/proguard-rules.txt
+# based on https://github.com/groovy/groovy-android-gradle-plugin/blob/master/groovy-android-sample-app/proguard-rules.txt
+
+-dontobfuscate
+-keep class org.codehaus.groovy.vmplugin.**
+-keep class org.codehaus.groovy.runtime.dgm*
+-keepclassmembers class org.codehaus.groovy.runtime.dgm* {*;}
+-keepclassmembers class ** implements org.codehaus.groovy.runtime.GeneratedClosure {*;}
+-keepclassmembers class org.codehaus.groovy.reflection.GroovyClassValue* {*;}
+-dontwarn org.codehaus.groovy.**
+-dontwarn groovy**
+
+# my stuff
+-keepclassmembers class pl.rafalmag.** {*;}
+-keep public class pl.rafalmag.**
