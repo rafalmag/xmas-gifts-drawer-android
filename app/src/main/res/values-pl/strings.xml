@@ -3,4 +3,5 @@
     <string name="action_settings">Ustawienia</string>
     <string name="section_format">Hello World z sekcji: %1$d</string>
     <string name="add_contact">Dodaj osobę</string>
+    <string name="welcome_info">Informacje powitalne</string>
 </resources>
